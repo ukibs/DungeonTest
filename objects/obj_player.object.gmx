@@ -30,6 +30,7 @@ movement_speed = 5;
 nextX = x;
 nextY = y;
 rig_length = 32;
+direction_looking = 270;
 </string>
           </argument>
         </arguments>
@@ -57,15 +58,46 @@ key_up = keyboard_check(vk_up);
 key_down = keyboard_check(vk_down);
 key_left = keyboard_check(vk_left);
 key_right = keyboard_check(vk_right);
+key_attack = keyboard_check_released(vk_space);
 
 //Control para decidir donde moverse
     //Habrá que ahcer un ajustre más adelante
     //De momento deja en diagonal
 if(nextX == x &amp;&amp; nextY == y){
-    if(!place_meeting(nextX + ((-key_left + key_right) * rig_length), y, obj_solid_terrain))
+    if(!place_meeting(nextX + ((-key_left + key_right) * rig_length), y, obj_solid_terrain)){
         nextX += (-key_left + key_right) * rig_length;
-    if(!place_meeting(x, nextY + ((-key_up + key_down) * rig_length), obj_solid_terrain))   
+        //Set direction to look
+        if(nextX != 0)
+            direction_looking = (-key_left + key_right) * 90 + 90; // Izquierda o derecha
+    }
+    if(!place_meeting(x, nextY + ((-key_up + key_down) * rig_length), obj_solid_terrain)){   
         nextY += (-key_up + key_down) * rig_length;
+        //Set direction to look
+        if(nextY != 0)
+            direction_looking = (-key_up + key_down) * 90 + 180; // Arriba o abajo
+    }
+    //Ataque melee
+    if(key_attack){
+        switch(direction_looking){
+            case 0: //Rigth
+                x_deviation = rig_length;
+                y_deviation = 0;
+            break;
+            case 90: //Up
+                x_deviation = 0;
+                y_deviation = -rig_length;
+            break;
+            case 180: //Left
+                x_deviation = -rig_length;
+                y_deviation = 0;
+            break;
+            case 270: //Down
+                x_deviation = 0;
+                y_deviation = rig_length;
+            break;
+        }
+        attack = instance_create(x + x_deviation, y + y_deviation, obj_melee_attack);
+    } 
 }
 //Control para mover al personaje
     //En horizontal
@@ -78,6 +110,33 @@ if(abs(nextY - y) &lt; movement_speed)
     y = nextY;
 else
     y += sign(nextY - y) * movement_speed;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="64">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>//Text parameters
+draw_set_colour(c_white);
+
+//Test stuff
+draw_text(10, 10, direction);
 </string>
           </argument>
         </arguments>
