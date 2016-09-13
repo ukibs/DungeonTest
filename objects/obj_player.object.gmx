@@ -67,13 +67,13 @@ if(nextX == x &amp;&amp; nextY == y){
     if(!place_meeting(nextX + ((-key_left + key_right) * rig_length), y, obj_solid_terrain)){
         nextX += (-key_left + key_right) * rig_length;
         //Set direction to look
-        if(nextX != 0)
-            direction_looking = (-key_left + key_right) * 90 + 90; // Izquierda o derecha
+        if(-key_left + key_right != 0)
+            direction_looking = (-key_left + key_right) * -90 + 90; // Izquierda o derecha
     }
     if(!place_meeting(x, nextY + ((-key_up + key_down) * rig_length), obj_solid_terrain)){   
         nextY += (-key_up + key_down) * rig_length;
         //Set direction to look
-        if(nextY != 0)
+        if(-key_up + key_down != 0)
             direction_looking = (-key_up + key_down) * 90 + 180; // Arriba o abajo
     }
     //Ataque melee
@@ -137,6 +137,7 @@ draw_set_colour(c_white);
 
 //Test stuff
 draw_text(10, 10, direction);
+draw_text(10, 30, direction_looking);
 </string>
           </argument>
         </arguments>
